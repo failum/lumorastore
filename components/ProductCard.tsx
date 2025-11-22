@@ -13,22 +13,26 @@ const ProductCard = ({ product, updateSignedInUser }: ProductCardProps) => {
   return (
     <Link
       href={`/products/${product._id}`}
-      className="w-[220px] sm:w-[160px] xs:w-[130px] flex flex-col gap-1"
+      className="group w-[220px] sm:w-[160px] xs:w-[130px] flex flex-col gap-1"
     >
-      <Image
-        src={product.media[0]}
-        alt="product"
-        width={250}
-        height={300}
-        className="h-[250px] sm:h-[200px] xs:h-[160px] rounded-lg object-cover"
-      />
+      <div className="overflow-hidden rounded-lg bg-white">
+        <Image
+          src={product.media[0]}
+          alt="product"
+          width={250}
+          height={300}
+          className="h-[250px] sm:h-[200px] xs:h-[160px] object-contain transition-transform duration-300 ease-in-out group-hover:scale-110"
+        />
+      </div>
+
       <div>
         <p className="text-base sm:text-sm xs:text-[10px] font-bold">{product.title}</p>
         <p className="text-sm sm:text-xs xs:text-[9px] text-grey-2">{product.category}</p>
       </div>
+
       <div className="flex justify-between items-center">
         <p className="text-body-bold sm:text-sm xs:text-[9px]">
-          <span className="text-slate-600">ksh </span> {product.price}
+          <span className="text-green-600"> ksh {product.price.toLocaleString('en-KE')}</span>
         </p>
         <HeartFavorite product={product} updateSignedInUser={updateSignedInUser} />
       </div>

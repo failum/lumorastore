@@ -1,7 +1,6 @@
 "use client";
 
 import useCart from "@/lib/hooks/useCart";
-
 import { UserButton, useUser } from "@clerk/nextjs";
 import { CircleUserRound, Menu, Search, ShoppingCart } from "lucide-react";
 import Image from "next/image";
@@ -19,51 +18,53 @@ const Navbar = () => {
   const [query, setQuery] = useState("");
 
   return (
-    <div className="sticky top-0 z-10 py-2 px-10 flex gap-2 justify-between items-center bg-white max-sm:px-2">
+    <div className="sticky top-0 z-10 py-2 px-10 flex gap-2 justify-between items-center bg-gradient-to-r from-blue-300 to-blue-900 max-sm:px-2">
+      
+      {/* Logo */}
       <Link href="/">
-        <Image src='/milogo.PNG' alt="logo" width={130} height={70} />
+        <Image src='/bestlogo.jpg' alt="logo" width={100} height={40} className="rounded-full object-cover" />
       </Link>
-      <div className="flex gap-4 text-lg sm:text-base">
-  <a href="tel:0792753931" className="flex items-center gap-2 sm:gap-0">
-    📞<span className="hidden sm:inline">0792753931</span>
-  </a>
-  <a href="mailto:microplug2025@gmail.com" className="flex items-center gap-2 sm:gap-0">
-    📧<span className="hidden sm:inline">Email Us</span>
-  </a>
-  <a href="https://maps.google.com/maps?q=loc:36.8291508,36.8291508
-" target="_blank" className="flex items-center gap-2 sm:gap-0">
-    🌍<span className="hidden sm:inline">Our Location</span>
-  </a>
-</div>
 
+      {/* Phone + Email */}
+      <div className="flex gap-4 text-lg sm:text-base">
+        <a href="tel:0700141499" className="flex items-center gap-2 sm:gap-0">
+          📞<span className="hidden sm:inline">0700141499</span>
+        </a>
+        <a href="mailto:kaceymwangi@gmail.com" className="flex items-center gap-2 sm:gap-0">
+          📧<span className="hidden sm:inline">Email Us</span>
+        </a>
+      </div>
+
+      {/* Desktop Menu */}
       <div className="flex gap-4 text-base-bold max-lg:hidden">
         <Link
           href="/"
-          className={`hover:text-red-1 ${
-            pathname === "/" && "text-red-1"
-          }`}
+          className={`hover:text-red-1 ${pathname === "/" && "text-red-1"}`}
         >
           Home
         </Link>
+
+        <Link href="/allcollections" className="hover:text-red-1">
+          Categories
+        </Link>
+
         <Link
           href={user ? "/wishlist" : "/sign-in"}
-          className={`hover:text-red-1 ${
-            pathname === "/wishlist" && "text-red-1"
-          }`}
+          className={`hover:text-red-1 ${pathname === "/wishlist" && "text-red-1"}`}
         >
           Wishlist
         </Link>
+
         <Link
           href={user ? "/orders" : "/sign-in"}
-          className={`hover:text-red-1 ${
-            pathname === "/orders" && "text-red-1"
-          }`}
+          className={`hover:text-red-1 ${pathname === "/orders" && "text-red-1"}`}
         >
           Orders
         </Link>
       </div>
 
-      <div className="flex gap-3 border border-grey-2 px-3 py-1 items-center rounded-lg">
+      {/* Search Bar */}
+      <div className="flex gap-3 border border-grey-2 px-3 py-1 items-center rounded-lg bg-white">
         <input
           className="outline-none max-sm:max-w-[120px]"
           placeholder="Search..."
@@ -78,7 +79,10 @@ const Navbar = () => {
         </button>
       </div>
 
-      <div className="relative flex gap-3 items-center">
+      {/* Right Section */}
+      <div className="relative flex gap-3 items-center bg-white rounded-sm">
+
+        {/* Desktop Cart */}
         <Link
           href="/cart"
           className="flex items-center gap-3 border rounded-lg px-2 py-1 hover:bg-black hover:text-white max-md:hidden"
@@ -87,31 +91,52 @@ const Navbar = () => {
           <p className="text-base-bold">Cart ({cart.cartItems.length})</p>
         </Link>
 
+        {/* Mobile Menu Icon */}
         <Menu
           className="cursor-pointer lg:hidden"
           onClick={() => setDropdownMenu(!dropdownMenu)}
         />
 
+        {/* Mobile Dropdown Menu */}
         {dropdownMenu && (
           <div className="absolute top-12 right-5 flex flex-col gap-4 p-3 rounded-lg border bg-white text-base-bold lg:hidden">
-            <Link href="/" className="hover:text-red-1">
+            
+            <Link
+              href="/"
+              className="hover:text-red-1"
+              onClick={() => setDropdownMenu(false)}
+            >
               Home
             </Link>
+
+            <Link
+              href="/allcollections"
+              className="hover:text-red-1"
+              onClick={() => setDropdownMenu(false)}
+            >
+             <p className="text-sm text-green-400"> Categories </p> 
+            </Link>
+
             <Link
               href={user ? "/wishlist" : "/sign-in"}
               className="hover:text-red-1"
+              onClick={() => setDropdownMenu(false)}
             >
               Wishlist
             </Link>
+
             <Link
               href={user ? "/orders" : "/sign-in"}
               className="hover:text-red-1"
+              onClick={() => setDropdownMenu(false)}
             >
               Orders
             </Link>
+
             <Link
               href="/cart"
               className="flex items-center gap-3 border rounded-lg px-2 py-1 hover:bg-black hover:text-white"
+              onClick={() => setDropdownMenu(false)}
             >
               <ShoppingCart />
               <p className="text-base-bold">Cart ({cart.cartItems.length})</p>
@@ -119,8 +144,11 @@ const Navbar = () => {
           </div>
         )}
 
+        {/* Profile / Sign-in */}
         {user ? (
-          <UserButton afterSignOutUrl="/sign-in" />
+          <div className="bg-slate-500 hover:bg-slate-950">
+            <UserButton />
+          </div>
         ) : (
           <Link href="/sign-in">
             <CircleUserRound />

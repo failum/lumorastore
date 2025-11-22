@@ -7,7 +7,7 @@ import { useUser } from "@clerk/nextjs"
 import { useEffect, useState } from "react"
 
 const Wishlist = () => {
-  const { user } = useUser()
+  const { user, isSignedIn, isLoaded } = useUser()
 
   const [loading, setLoading] = useState(true)
   const [signedInUser, setSignedInUser] = useState<UserType | null>(null)
@@ -15,33 +15,46 @@ const Wishlist = () => {
 
   const getUser = async () => {
     try {
-      const res = await fetch("/api/users")
+      const res = await fetch("/api/users",{
+        method:"GET",
+        credentials:"include"
+      })
+      
+      if (!res.ok) {
+        if (res.status === 401) {
+          console.log("User not authenticated")
+          setSignedInUser(null)
+          setWishlist([])
+        } else {
+          console.error("Failed to get user:", res.status)
+        }
+        setLoading(false)
+        return
+      }
+      
       const data = await res.json()
       setSignedInUser(data)
-      setLoading(false)
     } catch (err) {
       console.log("[users_GET]", err)
+      setSignedInUser(null)
+      setWishlist([])
+    } finally {
+      setLoading(false)
     }
   }
 
-  useEffect(() => {
-    if (user) {
-      getUser()
-    }
-  }, [user])
-
   const getWishlistProducts = async () => {
-    setLoading(true)
+    if (!signedInUser) {
+      setWishlist([])
+      return
+    }
 
-    if (!signedInUser) return
-
-    // Ensure wishlist is treated as an array
-    const wishlistArray = signedInUser.wishlist as string[] // or ProductType[] depending on the type you're expecting
+    // ✅ FIXED: Safe array access with optional chaining
+    const wishlistArray = signedInUser?.wishlist as string[] || []
 
     // Handle empty wishlist
     if (wishlistArray.length === 0) {
-      setWishlist([]) // Clear wishlist if empty
-      setLoading(false) // Stop loading
+      setWishlist([])
       return
     }
 
@@ -53,13 +66,29 @@ const Wishlist = () => {
         })
       )
 
-      setWishlist(wishlistProducts) // Set the wishlist with product details
+      // ✅ FIXED: Filter out any null/undefined products
+      const validProducts = wishlistProducts.filter((product): product is ProductType => 
+        product !== null && product !== undefined
+      )
+      
+      setWishlist(validProducts)
     } catch (err) {
       console.log("[getWishlistProducts] Error:", err)
-    } finally {
-      setLoading(false) // Stop loading in any case
+      setWishlist([])
     }
   }
+
+  useEffect(() => {
+    if (isLoaded) {
+      if (isSignedIn) {
+        getUser()
+      } else {
+        setSignedInUser(null)
+        setWishlist([])
+        setLoading(false)
+      }
+    }
+  }, [isLoaded, isSignedIn])
 
   useEffect(() => {
     if (signedInUser) {
@@ -71,22 +100,42 @@ const Wishlist = () => {
     setSignedInUser(updatedUser)
   }
 
-  return loading ? <Loader /> : (
+  // Show loading while checking auth
+  if (!isLoaded || loading) {
+    return <Loader />
+  }
+
+  // Show message if not signed in
+  if (!isSignedIn) {
+    return (
+      <div className="px-10 py-5">
+        <p className="text-heading3-bold my-10">Your Wishlist</p>
+        <p className="text-center text-gray-500">Please sign in to view your wishlist</p>
+      </div>
+    )
+  }
+
+  return (
     <div className="px-10 py-5">
       <p className="text-heading3-bold my-10">Your Wishlist</p>
-      {wishlist.length === 0 && (
-        <p>No items in your wishlist</p>
+      
+      {wishlist.length === 0 ? (
+        <p className="text-center text-gray-500">No items in your wishlist</p>
+      ) : (
+        <div className="flex flex-wrap justify-center gap-16">
+          {wishlist.map((product) => (
+            <ProductCard 
+              key={product._id} 
+              product={product} 
+              updateSignedInUser={updateSignedInUser} 
+            />
+          ))}
+        </div>
       )}
-
-      <div className="flex flex-wrap justify-center gap-16">
-        {wishlist.map((product) => (
-          <ProductCard key={product._id} product={product} updateSignedInUser={updateSignedInUser} />
-        ))}
-      </div>
     </div>
   )
 }
 
-export const dynamic = "force-dynamic";
+export const dynamic = "force-dynamic"
 
 export default Wishlist

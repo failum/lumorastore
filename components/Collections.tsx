@@ -3,12 +3,24 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ChevronDown } from "lucide-react";
 
+// Define the Collection type based on your data structure
+interface Collection {
+  _id: string;
+  title: string;
+  description: string;
+  image: string;
+  products: string[];
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
 const Collections = async () => {
-  const collections = await getCollections();
+  const collections: Collection[] = await getCollections();
 
   return (
     <div className="flex flex-col items-center gap-10 py-8 px-5 overflow-hidden">
-     <p className="text-2xl sm:text-xl xs:text-lg font-bold">Main categories</p>
+      <p className="text-2xl sm:text-xl xs:text-lg font-bold">Main categories</p>
 
       {!collections || collections.length === 0 ? (
         <p className="text-body-bold">No main categories found</p>
@@ -20,10 +32,10 @@ const Collections = async () => {
               id="scroll-container"
               className="flex w-max animate-scroll whitespace-nowrap items-center"
             >
-              {[...collections, ...collections].map((collection, index) => (
+              {collections.map((collection: Collection) => (
                 <Link
                   href={`/collections/${collection._id}`}
-                  key={`${collection._id}-${index}`}
+                  key={collection._id}
                   className="shrink-0 px-4 flex flex-col items-center justify-center"
                 >
                   <div className="h-[180px] w-[250px] flex items-center justify-center overflow-hidden">
@@ -55,10 +67,10 @@ const Collections = async () => {
                 <ChevronDown size={22} className="group-open:rotate-180 transition-transform" />
               </summary>
               <div className="mt-2 border border-gray-300 rounded-lg bg-white shadow-md p-5 grid grid-cols-2 md:grid-cols-3 gap-4 max-h-[400px] overflow-y-auto">
-                {[...collections, ...collections].map((collection, index) => (
+                {collections.map((collection: Collection) => (
                   <Link
                     href={`/collections/${collection._id}`}
-                    key={`${collection._id}-${index}`}
+                    key={collection._id}
                     className="flex items-center gap-4 hover:bg-gray-100 p-3 rounded-lg"
                   >
                     <Image

@@ -1,34 +1,121 @@
+// lib/actions.ts
 export const getCollections = async () => {
-  const collections = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/collections`)
-  return await collections.json()
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/collections`
+      , {
+      cache: 'no-store' // or next: { revalidate: 60 } for ISR
+   }
+  );
+    
+    if (!response.ok) {
+      throw new Error(`Failed to fetch collections: ${response.status}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching collections:', error);
+    return [];
+  }
 }
 
 export const getCollectionDetails = async (collectionId: string) => {
-  const collection = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/collections/${collectionId}`)
-  return await collection.json()
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/collections/${collectionId}`, {
+      cache: 'no-store'
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to fetch collection ${collectionId}: ${response.status}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error(`Error fetching collection ${collectionId}:`, error);
+    return null;
+  }
 }
 
 export const getProducts = async () => {
-  const products = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`)
-  return await products.json()
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`, {
+      next: { revalidate: 60 } // Revalidate every 60 seconds
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to fetch products: ${response.status}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    return [];
+  }
 }
 
 export const getProductDetails = async (productId: string) => {
-  const product = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${productId}`)
-  return await product.json()
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${productId}`, {
+      cache: 'no-store'
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to fetch product ${productId}: ${response.status}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error(`Error fetching product ${productId}:`, error);
+    return null;
+  }
 }
 
 export const getSearchedProducts = async (query: string) => {
-  const searchedProducts = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/search/${query}`)
-  return await searchedProducts.json()
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/search/${query}`, {
+      cache: 'no-store'
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to search products: ${response.status}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error searching products:', error);
+    return [];
+  }
 }
 
 export const getOrders = async (customerId: string) => {
-  const orders = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders/customers/${customerId}`)
-  return await orders.json()
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders/customers/${customerId}`, {
+      cache: 'no-store'
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to fetch orders: ${response.status}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching orders:', error);
+    return [];
+  }
 }
 
 export const getRelatedProducts = async (productId: string) => {
-  const relatedProducts = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${productId}/related`)
-  return await relatedProducts.json()
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/${productId}/related`, {
+      cache: 'no-store'
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to fetch related products: ${response.status}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching related products:', error);
+    return [];
+  }
 }

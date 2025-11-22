@@ -1,5 +1,5 @@
 import { getOrders } from "@/lib/actions/actions";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import { Box, Truck, CreditCard, User, Calendar } from "lucide-react";
 
 // Define the OrderItem type
@@ -43,7 +43,7 @@ interface OrderType {
 }
 
 const Orders = async () => {
-  const { userId } = auth();
+  const { userId } =await auth();
 
   // Fetch orders with type safety
   const orders: OrderType[] = await getOrders(userId as string);

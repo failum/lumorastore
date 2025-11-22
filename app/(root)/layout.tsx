@@ -1,16 +1,14 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 
 import "../globals.css";
 import Navbar from "@/components/Navbar";
 import ToasterProvider from "@/lib/providers/ToasterProvider";
-
-const inter = Inter({ subsets: ["latin"] });
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "microplug Store",
-  description: "microplug Ecommerce Store",
+  title: "Lumora tech",
+  description: "All your lighting solutions",
 };
 
 export default function RootLayout({
@@ -20,11 +18,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body style={{ fontFamily: "Arial, sans-serif" }}>
         <ClerkProvider>
           <ToasterProvider />
           <Navbar />
           {children}
+          <Footer />
         </ClerkProvider>
       </body>
     </html>

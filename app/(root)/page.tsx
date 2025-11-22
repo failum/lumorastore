@@ -1,17 +1,34 @@
-import Collections from "@/components/Collections";
-import ProductList from "@/components/ProductList";
 
-import Image from "next/image";
+import BannerSlider from "@/components/BannerSlider";
+import dynamicImport from "next/dynamic";
+
+// Lazy-load components for suspense fallback
+const Collections = dynamicImport(() => import("@/components/Collections"), {
+  loading: () => <CollectionsSkeleton />,
+});
+const ProductList = dynamicImport(() => import("@/components/ProductList"), {
+  loading: () => <ProductListSkeleton />,
+});
+
+// Import skeletons
+import CollectionsSkeleton from "@/components/skeletons/CollectionsSkeleton";
+import ProductListSkeleton from "@/components/skeletons/ProductListSkeleton";
 
 export default function Home() {
   return (
     <>
-      <Image src="/mibanner.png" alt="banner" width={2000} height={1000} className="w-screen" />
-      <Collections />
-      <ProductList />
+      {/* Push down to avoid navbar overlap */}
+      <div className=" w-full"> {/* adjust 64px to your navbar height */}
+        
+       <BannerSlider />
+
+        {/* Content */}
+        <Collections />
+        <ProductList />
+      </div>
     </>
   );
 }
 
+// Force dynamic rendering
 export const dynamic = "force-dynamic";
-
