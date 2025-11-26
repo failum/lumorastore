@@ -7,16 +7,12 @@ export default function BannerSlider() {
   const images = [
     "/mibanner.jpg",
     "/banner1.jpg",
-    "/banner2.jpg",
-    "/banner3.jpg",
     "/banner4.jpg",
     "/banner5.jpg",
-    "/banner6.jpg",
   ];
 
   const [index, setIndex] = useState(0);
 
-  // Auto slide every 4 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % images.length);
@@ -26,7 +22,7 @@ export default function BannerSlider() {
   }, []);
 
   return (
-    <div className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden">
+    <div className="relative w-full h-[250px] xs:h-[280px] sm:h-[350px] md:h-[450px] lg:h-[600px] overflow-hidden">
 
       {images.map((src, i) => (
         <div
@@ -35,16 +31,29 @@ export default function BannerSlider() {
             i === index ? "opacity-100" : "opacity-0"
           }`}
         >
+          {/* Blurred Background */}
           <Image
             src={src}
-            alt={`banner-${i}`}
+            alt={`bg-${i}`}
             fill
-            className="object-cover object-center sm:object-top"
+            className="object-cover blur-2xl scale-110"
             priority={i === 0}
           />
+
+          {/* Real Image - flex centering to remove spaces */}
+          <div className="relative w-full h-full flex items-center justify-center">
+            <div className="w-full h-full max-h-full">
+              <Image
+                src={src}
+                alt={`banner-${i}`}
+                fill
+                className="object-contain sm:object-cover z-10"
+                priority={i === 0}
+              />
+            </div>
+          </div>
         </div>
       ))}
-
     </div>
   );
 }
