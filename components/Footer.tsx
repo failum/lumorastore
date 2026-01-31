@@ -10,7 +10,7 @@ export default function Footer() {
           {/* Logo / Brand */}
           <div className="flex-shrink-0">
             <h2 className="text-2xl font-bold text-white">Lumora  Tech Ltd</h2>
-            <p className="mt-1 text-sm">MyamaKima, Nairobi CBD</p>
+            <p className="mt-1 text-sm">NyamaKima, Nairobi CBD</p>
           </div>
 
           {/* Social links */}
