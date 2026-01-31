@@ -1,7 +1,7 @@
 // app/layout.tsx
 import type { Metadata, Viewport } from "next"; // Add Viewport import
 import { ClerkProvider } from "@clerk/nextjs";
-
+import TestimonialsSkeleton from "@/components/skeletons/TestimonialsKeleton";
 import "../globals.css";
 import Navbar from "@/components/Navbar";
 import ToasterProvider from "@/lib/providers/ToasterProvider";
@@ -9,6 +9,8 @@ import Footer from "@/components/Footer";
 import InstallPrompt from "@/components/pwa/InstallPrompt";
 import { ServiceWorkerProvider } from "@/components/pwa/ServiceWorkerProvider";
 import { FloatingBubbles } from "@/components/FloatingBubble";
+import Testimonials from "@/components/Testimonials";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Lumora tech",
@@ -55,6 +57,10 @@ export default function RootLayout({
             <main className="min-h-screen pt-16 md:pt-20">
               {children}
             </main>
+            <Suspense fallback={<TestimonialsSkeleton/>}>
+            <Testimonials />
+            </Suspense>
+            
             <Footer />
             <InstallPrompt />
           </ClerkProvider>
