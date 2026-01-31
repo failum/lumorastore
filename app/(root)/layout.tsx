@@ -12,7 +12,7 @@ import { ServiceWorkerProvider } from "@/components/pwa/ServiceWorkerProvider";
 export const metadata: Metadata = {
   title: "Lumora tech",
   description: "All your lighting solutions",
-   manifest: '/site.webmanifest', 
+  manifest: '/site.webmanifest', 
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
@@ -48,7 +48,10 @@ export default function RootLayout({
           <ClerkProvider>
             <ToasterProvider />
             <Navbar />
-            {children}
+            {/* Add padding-top to prevent content from hiding behind navbar */}
+            <main className="min-h-screen pt-16 md:pt-20">
+              {children}
+            </main>
             <Footer />
             <InstallPrompt />
           </ClerkProvider>
