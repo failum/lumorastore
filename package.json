@@ -20,6 +20,7 @@
     "framer-motion": "^12.4.4",
     "lucide-react": "^0.341.0",
     "mongoose": "^8.2.0",
+    "motion": "^12.29.2",
     "next": "^14.2.33",
     "next-pwa": "^5.6.0",
     "react": "^18",

@@ -8,6 +8,7 @@ import ToasterProvider from "@/lib/providers/ToasterProvider";
 import Footer from "@/components/Footer";
 import InstallPrompt from "@/components/pwa/InstallPrompt";
 import { ServiceWorkerProvider } from "@/components/pwa/ServiceWorkerProvider";
+import { FloatingBubbles } from "@/components/FloatingBubble";
 
 export const metadata: Metadata = {
   title: "Lumora tech",
@@ -44,8 +45,10 @@ export default function RootLayout({
         <link rel="manifest" href="/site.webmanifest" />
       </head>
       <body style={{ fontFamily: "Arial, sans-serif" }}>
+        <FloatingBubbles count={100}/>
         <ServiceWorkerProvider>
           <ClerkProvider>
+            
             <ToasterProvider />
             <Navbar />
             {/* Add padding-top to prevent content from hiding behind navbar */}
